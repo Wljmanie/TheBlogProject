@@ -41,7 +41,7 @@ namespace TheBlogProject.Models
         public IFormFile Image { get; set; }
 
         //Navigation Properties
-        public virtual IdentityUser Author { get; set; }
+        public virtual BlogUser Author { get; set; }
         public virtual Blog Blog { get; set; }
         public virtual ICollection<Comment>? Comments { get; set; } = new HashSet<Comment>();
         public virtual ICollection<PostTag>? PostTags { get; set; } = new HashSet<PostTag>();
