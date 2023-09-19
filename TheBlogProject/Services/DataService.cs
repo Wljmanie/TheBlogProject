@@ -51,6 +51,7 @@ namespace TheBlogProject.Services
                 UserName = "wljmanie@gmail.com",
                 FirstName = "Wesley",
                 LastName = "Manie",
+                DisplayName = "Admin",
                 PhoneNumber = "0640073722",
                 EmailConfirmed = true
             };
@@ -64,6 +65,7 @@ namespace TheBlogProject.Services
                 UserName = "mod@gmail.com",
                 FirstName = "Mod",
                 LastName = "Test",
+                DisplayName = "TestMod",
                 PhoneNumber = "0123456789",
                 EmailConfirmed = true
             };
@@ -77,6 +79,7 @@ namespace TheBlogProject.Services
                 UserName = "proofReader@gmail.com",
                 FirstName = "ProofReader",
                 LastName = "Test",
+                DisplayName = "TestProofReader",
                 PhoneNumber = "0123456789",
                 EmailConfirmed = true
             };
@@ -90,6 +93,7 @@ namespace TheBlogProject.Services
                 UserName = "reader@gmail.com",
                 FirstName = "Reader",
                 LastName = "Test",
+                DisplayName = "TestReader",
                 PhoneNumber = "0123456789",
                 EmailConfirmed = true
             };

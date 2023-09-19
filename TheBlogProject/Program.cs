@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using TheBlogProject.Data;
 using TheBlogProject.Models;
 using TheBlogProject.Services;
+using TheBlogProject.Services.Interfaces;
+using TheBlogProject.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +25,8 @@ builder.Services.AddControllersWithViews();
 //builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<DataService>();
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.AddScoped<IBlogEmailSender, EmailService>();
 
 
 var app = builder.Build();
