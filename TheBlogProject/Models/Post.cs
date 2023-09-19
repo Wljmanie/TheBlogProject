@@ -9,7 +9,7 @@ namespace TheBlogProject.Models
     {
         public int Id { get; set; }
         public int BlogId { get; set; }
-        public string AuthorId { get; set; }
+        public string? AuthorId { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at most {1} characters.", MinimumLength = 3)]
@@ -41,8 +41,8 @@ namespace TheBlogProject.Models
         public IFormFile Image { get; set; }
 
         //Navigation Properties
-        public virtual BlogUser Author { get; set; }
         public virtual Blog Blog { get; set; }
+        public virtual BlogUser? Author { get; set; }
         public virtual ICollection<Comment>? Comments { get; set; } = new HashSet<Comment>();
         public virtual ICollection<PostTag>? PostTags { get; set; } = new HashSet<PostTag>();
     }

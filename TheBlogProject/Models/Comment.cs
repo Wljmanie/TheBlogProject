@@ -8,7 +8,7 @@ namespace TheBlogProject.Models
     {
         public int Id { get; set; }
         public int PostId { get; set; }
-        public string AuthorId { get; set; }
+        public string? AuthorId { get; set; }
         public string? ModeratorId { get; set; }
 
         [Required]

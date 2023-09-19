@@ -28,5 +28,6 @@ namespace TheBlogProject.Models
         //Navigation Properties
         public virtual ICollection<Blog> Blogs { get; set; } = new HashSet<Blog>();
         public virtual ICollection<Post> Posts { get; set; } = new HashSet<Post>();
+        
     }
 }
