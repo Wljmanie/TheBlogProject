@@ -16,11 +16,11 @@ namespace TheBlogProject.Models
         public string LastName { get; set; }
 
         [Display(Name = "User Image")]
-        public byte[] ImageData { get; set; }
+        public byte[]? ImageData { get; set; }
         [Display(Name = "Image Type")]
-        public string ImageType { get; set; }
+        public string? ImageType { get; set; }
     
-        public string TwitterUrl { get; set; }
+        public string? TwitterUrl { get; set; }
 
         [NotMapped]
         public string FullName { get { return $"{FirstName} {LastName}"; } }
