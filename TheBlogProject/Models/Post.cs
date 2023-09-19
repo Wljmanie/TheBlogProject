@@ -38,7 +38,7 @@ namespace TheBlogProject.Models
         public string? ImageType { get; set; }
 
         [NotMapped]
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
 
         //Navigation Properties
         public virtual Blog Blog { get; set; }

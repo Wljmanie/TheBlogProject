@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TheBlogProject.Data;
 using TheBlogProject.Models;
+using TheBlogProject.Services;
 
 namespace TheBlogProject.Controllers
 {
     public class PostsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly BasicSlugService _slugService;
 
-        public PostsController(ApplicationDbContext context)
+        public PostsController(ApplicationDbContext context, BasicSlugService slugService)
         {
             _context = context;
+            _slugService = slugService;
         }
 
         // GET: Posts
@@ -63,6 +66,17 @@ namespace TheBlogProject.Controllers
         {
             if (ModelState.IsValid)
             {
+                var slug = _slugService.UrlFriendly(post.Title);
+                if (!_slugService.IsUnique(slug))
+                {
+                    ModelState.AddModelError("Title", "The Title you provided cannot be used as it results in a duplicate slug.");
+                    return View(post);
+                }
+                
+                post.Slug = slug;
+               
+
+
                 _context.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

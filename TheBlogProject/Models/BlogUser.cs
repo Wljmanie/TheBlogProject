@@ -23,7 +23,9 @@ namespace TheBlogProject.Models
         public byte[]? ImageData { get; set; }
         [Display(Name = "Image Type")]
         public string? ImageType { get; set; }
-    
+        [NotMapped]
+        public IFormFile? Image { get; set; }
+
         public string? TwitterUrl { get; set; }
 
         [NotMapped]
