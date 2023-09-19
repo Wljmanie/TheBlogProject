@@ -33,9 +33,9 @@ namespace TheBlogProject.Models
         public string Slug { get; set; }
 
         [Display(Name = "Post Image")]
-        public byte[] ImageData { get; set; }
+        public byte[]? ImageData { get; set; }
         [Display(Name = "Image Type")]
-        public string ImageType { get; set; }
+        public string? ImageType { get; set; }
 
         [NotMapped]
         public IFormFile Image { get; set; }

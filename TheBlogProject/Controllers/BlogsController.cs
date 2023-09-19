@@ -57,7 +57,7 @@ namespace TheBlogProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,AuthorId,Title,Description,CreatedDate,UpdatedDate,ProductionStatus,ImageData,ImageType")] Blog blog)
+        public async Task<IActionResult> Create([Bind("Title,Description,Image")] Blog blog)
         {
             if (ModelState.IsValid)
             {

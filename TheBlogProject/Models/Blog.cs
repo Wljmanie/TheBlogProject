@@ -27,9 +27,9 @@ namespace TheBlogProject.Models
         public ProductionStatus ProductionStatus { get; set; }
 
         [Display(Name = "Blog Image")]
-        public byte[] ImageData { get; set; }
+        public byte[]? ImageData { get; set; }
         [Display(Name = "Image Type")]
-        public string ImageType { get; set; }
+        public string? ImageType { get; set; }
 
         [NotMapped]
         public IFormFile Image {  get; set; }
