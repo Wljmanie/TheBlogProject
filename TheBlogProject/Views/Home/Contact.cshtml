@@ -1,0 +1,45 @@
+﻿@using TheBlogProject.ViewModels
+@model ContactMe
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            <p>Want to get in touch? Fill out the form below and send it to me.</p>
+
+            <form asp-action="Contact">
+                <div class="control-group">
+                    <div class="form-group floating-label-form-group controls">
+                        <label asp-for="Name"></label>
+                        <input asp-for="Name" type="text" class="form-control" placeholder="Name" required data-validation-required />
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="form-group floating-label-form-group controls">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" type="email" class="form-control" placeholder="Name" required data-validation-required-message="Please enter your email address." />
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="form-group floating-label-form-group controls">
+                        <label asp-for="Subject"></label>
+                        <input asp-for="Subject" type="text" class="form-control" placeholder="Please enter the subject." required data-validation-required />
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="form-group floating-label-form-group controls">
+                        <label asp-for="Message"></label>
+                        <textarea asp-for="Message" rows="5"  class="form-control" placeholder="Your message." required data-validation-required></textarea>
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <br />
+                <div id="success"></div>
+                <button type="submit" class="btn btn-primary" id="sendMessageButton">Send</button>
+            </form>
+
+        </div>
+    </div>
+</div>
