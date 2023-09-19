@@ -4,6 +4,7 @@
     {
         Incomplete,
         PreviewReady,
-        ProductionReady
+        ProductionReady,
+        Private
     }
 }
