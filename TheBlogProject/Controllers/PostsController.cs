@@ -68,6 +68,7 @@ namespace TheBlogProject.Controllers
                 .Include(p => p.Author)
                 .Include(p => p.Blog)
                 .FirstOrDefaultAsync(m => m.Slug == slug);
+            
             if (post == null)
             {
                 return NotFound();
@@ -93,9 +94,6 @@ namespace TheBlogProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("BlogId,Title,Abstract,Content,ProductionStatus,Image")] Post post)
         {
-            //var test = post.Blog;
-            //var test2 = post.Slug;
-            
             if (ModelState.IsValid)
             {
                 var slug = _slugService.UrlFriendly(post.Title);
