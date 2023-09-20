@@ -1,25 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TheBlogProject.Data;
 using TheBlogProject.Models;
 using TheBlogProject.Services;
+using TheBlogProject.Services.Interfaces;
 
 namespace TheBlogProject.Controllers
 {
     public class PostsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly BasicSlugService _slugService;
+        private readonly ISlugService _slugService;
+        private readonly UserManager<BlogUser> _userManager;
+        private readonly IImageService _imageService;
 
-        public PostsController(ApplicationDbContext context, BasicSlugService slugService)
+        public PostsController(ApplicationDbContext context, ISlugService slugService, UserManager<BlogUser> userManager, IImageService imageService)
         {
             _context = context;
             _slugService = slugService;
+            _userManager = userManager;
+            _imageService = imageService;
         }
 
         // GET: Posts
@@ -49,7 +57,7 @@ namespace TheBlogProject.Controllers
             return View(post);
         }*/
         //SLUG VERSION
-        public async Task<IActionResult> Details(string? slug)
+        public async Task<IActionResult> Details(string slug)
         {
             if (string.IsNullOrEmpty(slug))
             {
@@ -69,10 +77,12 @@ namespace TheBlogProject.Controllers
         }
 
         // GET: Posts/Create
+        [Authorize]
         public IActionResult Create()
         {
-            ViewData["AuthorId"] = new SelectList(_context.BlogUsers, "Id", "Id");
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description");
+           // ViewData["AuthorId"] = new SelectList(_context.BlogUsers, "Id", "Id");
+            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Title");
+            //ViewData["ProductionStatus"] = new SelectList(ProductionStatus.)
             return View();
         }
 
@@ -81,8 +91,11 @@ namespace TheBlogProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BlogId,AuthorId,Title,Abstract,Content,CreatedDate,UpdatedDate,ProductionStatus,Slug,ImageData,ImageType")] Post post)
+        public async Task<IActionResult> Create([Bind("BlogId,Title,Abstract,Content,ProductionStatus,Image")] Post post)
         {
+            //var test = post.Blog;
+            //var test2 = post.Slug;
+            
             if (ModelState.IsValid)
             {
                 var slug = _slugService.UrlFriendly(post.Title);
@@ -98,15 +111,17 @@ namespace TheBlogProject.Controllers
                 }
                 
                 post.Slug = slug;
-               
-
+                post.AuthorId = _userManager.GetUserId(User);
+                post.CreatedDate = DateTime.Now;
+                post.ImageData = await _imageService.EncodeImageAsync(post.Image);
+                post.ImageType = _imageService.ContentType(post.Image);
 
                 _context.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AuthorId"] = new SelectList(_context.BlogUsers, "Id", "Id", post.AuthorId);
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
+            //ViewData["AuthorId"] = new SelectList(_context.BlogUsers, "Id", "Id", post.AuthorId);
+            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Title", post.BlogId);
             return View(post);
         }
 

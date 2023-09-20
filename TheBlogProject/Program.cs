@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using TheBlogProject.Controllers;
 using TheBlogProject.Data;
 using TheBlogProject.Models;
 using TheBlogProject.Services;
@@ -54,6 +55,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapControllerRoute(name: "SlugRoute", pattern: "BlogPosts/{slug?}",defaults: new {controller = "Posts", action = "Details"});
 
 app.MapControllerRoute(
     name: "default",
