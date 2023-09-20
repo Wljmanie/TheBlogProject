@@ -30,7 +30,7 @@ namespace TheBlogProject.Controllers
         }
 
         // GET: Posts/Details/5
-        public async Task<IActionResult> Details(int? id)
+        /*public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Posts == null)
             {
@@ -41,6 +41,25 @@ namespace TheBlogProject.Controllers
                 .Include(p => p.Author)
                 .Include(p => p.Blog)
                 .FirstOrDefaultAsync(m => m.Id == id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            return View(post);
+        }*/
+        //SLUG VERSION
+        public async Task<IActionResult> Details(string? slug)
+        {
+            if (string.IsNullOrEmpty(slug))
+            {
+                return NotFound();
+            }
+
+            var post = await _context.Posts
+                .Include(p => p.Author)
+                .Include(p => p.Blog)
+                .FirstOrDefaultAsync(m => m.Slug == slug);
             if (post == null)
             {
                 return NotFound();
@@ -67,6 +86,11 @@ namespace TheBlogProject.Controllers
             if (ModelState.IsValid)
             {
                 var slug = _slugService.UrlFriendly(post.Title);
+                if (string.IsNullOrEmpty(slug))
+                {
+                    ModelState.AddModelError("Title", "The Title you provided results in an empty slug.");
+                    return View(post);
+                }
                 if (!_slugService.IsUnique(slug))
                 {
                     ModelState.AddModelError("Title", "The Title you provided cannot be used as it results in a duplicate slug.");
@@ -118,6 +142,8 @@ namespace TheBlogProject.Controllers
 
             if (ModelState.IsValid)
             {
+                var originalPost = await _context.Posts.Include(p => p.PostTags).FirstOrDefaultAsync(p => p.Id == post.Id);
+                //Now I need to store everything that was already in the orginal one. So preserve stuff that didn't change like image.
                 try
                 {
                     _context.Update(post);
