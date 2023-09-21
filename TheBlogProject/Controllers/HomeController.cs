@@ -5,6 +5,7 @@ using TheBlogProject.Data;
 using TheBlogProject.Models;
 using TheBlogProject.Services.Interfaces;
 using TheBlogProject.ViewModels;
+using X.PagedList;
 
 namespace TheBlogProject.Controllers
 {
@@ -21,12 +22,24 @@ namespace TheBlogProject.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
-            var blogs = await _context.Blogs.ToListAsync();
+            //var blogs = await _context.Blogs.ToListAsync();
 
 
-            return View(blogs);
+            //return View(blogs);
+
+            var pageNumber = page ?? 1;
+            var pageSize = 3;
+
+            var blogs = _context.Blogs
+                //.Where(b => b.Posts.Any(p => p.ProductionStatus == Enums.ProductionStatus.ProductionReady))
+                .OrderByDescending(b => b.CreatedDate)
+                .ToPagedListAsync(pageNumber, pageSize);
+
+            return View(await blogs);
+
+
         }
 
         public IActionResult Privacy()
