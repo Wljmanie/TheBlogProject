@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TheBlogProject.Data;
+using TheBlogProject.Enums;
 using TheBlogProject.Models;
 using TheBlogProject.Services;
 using TheBlogProject.Services.Interfaces;
+using X.PagedList;
 
 namespace TheBlogProject.Controllers
 {
@@ -21,13 +23,15 @@ namespace TheBlogProject.Controllers
         private readonly ISlugService _slugService;
         private readonly UserManager<BlogUser> _userManager;
         private readonly IImageService _imageService;
+        private readonly BlogSearchService _blogSearchService;
 
-        public PostsController(ApplicationDbContext context, ISlugService slugService, UserManager<BlogUser> userManager, IImageService imageService)
+        public PostsController(ApplicationDbContext context, ISlugService slugService, UserManager<BlogUser> userManager, IImageService imageService, BlogSearchService blogSearchService)
         {
             _context = context;
             _slugService = slugService;
             _userManager = userManager;
             _imageService = imageService;
+            _blogSearchService = blogSearchService;
         }
 
         // GET: Posts
@@ -57,6 +61,19 @@ namespace TheBlogProject.Controllers
             return View(post);
         }*/
         //SLUG VERSION
+
+        public async Task<IActionResult> SearchIndex(int? page, string searchTerm)
+        {
+            ViewData["SearchTerm"] = searchTerm;
+
+            var pageNumber = page ?? 1;
+            var pageSize = 5;
+
+            var posts = _blogSearchService.SearchPosts(searchTerm);
+            return View(await posts.ToPagedListAsync(pageNumber, pageSize)); 
+
+        }
+
         public async Task<IActionResult> Details(string slug)
         {
             if (string.IsNullOrEmpty(slug))

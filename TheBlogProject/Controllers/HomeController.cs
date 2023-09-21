@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using TheBlogProject.Data;
@@ -33,6 +34,7 @@ namespace TheBlogProject.Controllers
             var pageSize = 3;
 
             var blogs = _context.Blogs
+                .Include(b => b.Author)
                 //.Where(b => b.Posts.Any(p => p.ProductionStatus == Enums.ProductionStatus.ProductionReady))
                 .OrderByDescending(b => b.CreatedDate)
                 .ToPagedListAsync(pageNumber, pageSize);
