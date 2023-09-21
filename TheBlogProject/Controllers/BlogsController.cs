@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TheBlogProject.Data;
+using TheBlogProject.Enums;
 using TheBlogProject.Models;
 using TheBlogProject.Services.Interfaces;
 
@@ -54,7 +55,7 @@ namespace TheBlogProject.Controllers
         }
 
         // GET: Blogs/Create
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             ViewData["AuthorId"] = new SelectList(_context.BlogUsers, "Id", "Id");
