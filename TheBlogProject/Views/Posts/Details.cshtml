@@ -1,5 +1,7 @@
 ﻿@using TheBlogProject.Services.Interfaces
+@using Microsoft.AspNetCore.Identity
 @inject IImageService imageService
+@inject UserManager<BlogUser> userManager
 @model TheBlogProject.Models.Post
 
 @{
@@ -109,7 +111,7 @@
 
 <hr />
 
-<span class="btn btn-sm btn-dark btn-block">@Model.Comments.Count COMMENT(S)</span>
+<button id="commentSection" class="btn btn-sm btn-dark btn-block">@Model.Comments.Count COMMENT(S)</button>
 
 @foreach(var comment in Model.Comments)
 {
@@ -119,6 +121,46 @@
             <h4>@comment.BlogUser.DisplayName</h4>
             <small><i>Posted on @comment.Created.ToString("MMM dd, yyyy")</i></small>
             <p>@comment.Body</p>
+
+            @if(comment.Moderated is null && comment.Deleted is null && comment.BlogUserId == userManager.GetUserId(User))
+            {
+                <hr />
+                <button data-toggle="modal" data-target="#editModal" class="btn-sm btn-dark float-right font-weigh-bold">EDIT</button>
+            }
         </div>
     </div>
+    @*Modals*@
+    <div class="modal" id="editModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <h4 class="modal-title">Editing Comment</h4>
+
+
+                <div class="modal-body">
+                    <form asp-action="Edit" asp-controller="Comments">
+                        @Html.Hidden("Id", comment.Id)
+                        <div class="form-group">
+                            <textarea name="Body" class="form-control" required> @comment.Body</textarea>
+                        </div>
+                        <button class="btn-sm btn-dark border-success font-weight-bold" type="submit">SUBMIT</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-sm btn-dark font-weight-bold" data-dismiss="modal">ClOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+   // @section scripts    
+   // {
+   //     <script type="text/javascript">
+     //       $(document).ready(function () {
+       //         $('#btnEditModal').click(function (e) {
+         //           $('#editModal').modal('show');
+          //      });
+           // });
+   // </script>
+   // }
 }
+
+                        
