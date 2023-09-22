@@ -84,6 +84,8 @@ namespace TheBlogProject.Controllers
             var post = await _context.Posts
                 .Include(p => p.Author)
                 .Include(p => p.Blog)
+                .Include(p => p.Comments)
+                    .ThenInclude(c => c.BlogUser)
                 .FirstOrDefaultAsync(m => m.Slug == slug);
             
             if (post == null)
